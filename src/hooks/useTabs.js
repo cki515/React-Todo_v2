@@ -1,4 +1,4 @@
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilValue } from "recoil";
 import {
   todoList__sortIndexAtom,
   todoList_filterCompletedIndexAtom,
@@ -18,9 +18,9 @@ export default function useTabs() {
 
   // completed tabs
   const getfilteredTodos = (todos) => {
-    if (filterCompletedIndex == 1)
+    if (filterCompletedIndex === 1)
       return todos.filter((todo) => !todo.completed);
-    if (filterCompletedIndex == 2)
+    if (filterCompletedIndex === 2)
       return todos.filter((todo) => todo.completed);
 
     return todos;
@@ -29,19 +29,19 @@ export default function useTabs() {
   // sorted tabs
   const filteredTodos = getfilteredTodos(todosState.todos);
   const getSortedTodos = () => {
-    if (sortIndex == 0) {
+    if (sortIndex === 0) {
       return [...filteredTodos].sort((a, b) => {
-        if (a.performDate == b.performDate) return 0;
+        if (a.performDate === b.performDate) return 0;
         return a.performDate > b.performDate ? 1 : -1;
       });
-    } else if (sortIndex == 1) {
+    } else if (sortIndex === 1) {
       return [...filteredTodos].sort((a, b) => {
-        if (a.performDate == b.performDate) return 0;
+        if (a.performDate === b.performDate) return 0;
         return a.performDate < b.performDate ? 1 : -1;
       });
-    } else if (sortIndex == 2) {
+    } else if (sortIndex === 2) {
       return [...filteredTodos].sort((a, b) => {
-        return a.id > b.id ? 1 : -1;
+        return a.no > b.no ? 1 : -1;
       });
     }
     return filteredTodos;

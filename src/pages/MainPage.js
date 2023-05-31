@@ -4,7 +4,7 @@ import TodoList from "./TodoList";
 
 export default function MainPage() {
   const todosState = useTodosState();
-  const todosEmpty = todosState.todos.length == 0;
+  const todosEmpty = todosState.todos.length === 0;
   if (todosEmpty) {
     return <TodosEmpty />;
   }

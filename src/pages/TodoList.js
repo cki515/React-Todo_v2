@@ -19,7 +19,7 @@ export default function TodoList() {
         <ul className="px-6 sm:px-8 pb-6 sm:pb-8">
           {sortTodos.map((el, index) => (
             <TodoListItem
-              key={el.id}
+              key={el.no}
               todo={el}
               openDrawer={todoOptionDrawerState.openDrawer}
             />

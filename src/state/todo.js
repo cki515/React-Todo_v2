@@ -17,8 +17,8 @@ export const todosAtom = atom({
   effects_UNSTABLE: [persistAtomTodos],
 });
 
-export const lastTodoIdAtom = atom({
-  key: "app/lastTodoIdAtom",
+export const lastTodoNoAtom = atom({
+  key: "app/lastTodoNoAtom",
   default: 0,
   effects_UNSTABLE: [persistAtomLastTodoId],
 });

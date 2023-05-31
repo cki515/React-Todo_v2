@@ -1,21 +1,22 @@
 import { useRef } from "react";
 import { useRecoilState } from "recoil";
 import { produce } from "immer";
-import { lastTodoIdAtom, todosAtom } from "../state/todo";
+import { lastTodoNoAtom, todosAtom } from "../state/todo";
 import { dateToStr } from "../state/util";
 
 export default function useTodosState() {
   const [todos, setTodos] = useRecoilState(todosAtom);
-  const [lastTodoId, setLastTodoId] = useRecoilState(lastTodoIdAtom);
-  const todoId = useRef(lastTodoId);
-  todoId.current = lastTodoId;
+  const [lastTodoNo, setLastTodoNo] = useRecoilState(lastTodoNoAtom);
+  const todoNoRef = useRef(lastTodoNo);
+
+  todoNoRef.current = lastTodoNo;
 
   const addTodo = (performDate, newContent) => {
-    const id = ++todoId.current;
-    setLastTodoId(id);
+    const no = ++todoNoRef.current;
+    setLastTodoNo(no);
 
     const newTodo = {
-      id: id,
+      no: no,
       regDate: dateToStr(new Date()),
       performDate: dateToStr(new Date(performDate)),
       content: newContent,
@@ -23,16 +24,16 @@ export default function useTodosState() {
     };
 
     setTodos((todos) => [newTodo, ...todos]);
-    return id;
+    return no;
   };
 
   const removeTodo = (index) => {
-    const newTodos = todos.filter((_, _index) => _index != index);
+    const newTodos = todos.filter((_, _index) => _index !== index);
     setTodos(newTodos);
   };
 
-  const removeTodoById = (id) => {
-    const index = findTodoIndexById(id);
+  const removeTodoByNo = (no) => {
+    const index = findTodoIndexByNo(no);
     removeTodo(index);
   };
 
@@ -44,13 +45,13 @@ export default function useTodosState() {
     setTodos(newTodos);
   };
 
-  const modifyTodoById = (id, performDate, newContent) => {
-    const index = findTodoIndexById(id);
+  const modifyTodoByNo = (no, performDate, newContent) => {
+    const index = findTodoIndexByNo(no);
     modifyTodo(index, performDate, newContent);
   };
 
-  const toggleTodoCompletedById = (id) => {
-    const index = findTodoIndexById(id);
+  const toggleTodoCompletedByNo = (no) => {
+    const index = findTodoIndexByNo(no);
     setTodos(
       produce(todos, (draft) => {
         draft[index].completed = !draft[index].completed;
@@ -58,12 +59,12 @@ export default function useTodosState() {
     );
   };
 
-  const findTodoIndexById = (id) => {
-    return todos.findIndex((todo) => todo.id == id);
+  const findTodoIndexByNo = (no) => {
+    return todos.findIndex((todo) => todo.no == no);
   };
 
-  const findTodoById = (id) => {
-    const index = findTodoIndexById(id);
+  const findTodoByNo = (no) => {
+    const index = findTodoIndexByNo(no);
     return todos[index];
   };
 
@@ -72,9 +73,9 @@ export default function useTodosState() {
     addTodo,
     removeTodo,
     modifyTodo,
-    removeTodoById,
-    findTodoById,
-    modifyTodoById,
-    toggleTodoCompletedById,
+    removeTodoByNo,
+    findTodoByNo,
+    modifyTodoByNo,
+    toggleTodoCompletedByNo,
   };
 }

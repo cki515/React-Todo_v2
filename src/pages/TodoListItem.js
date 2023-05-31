@@ -5,10 +5,10 @@ export default function TodoListItem({ todo, openDrawer }) {
   const todosState = useTodosState();
 
   return (
-    <li key={todo.id} className="mt-6 sm:mt-8">
+    <li key={todo.no} className="mt-6 sm:mt-8">
       <div className="flex gap-2">
         <Chip
-          label={`No : ${todo.id}`}
+          label={`No : ${todo.no}`}
           size="medium"
           color="secondary"
           variant="outlined"
@@ -22,7 +22,7 @@ export default function TodoListItem({ todo, openDrawer }) {
       </div>
       <div className="flex mt-2 sm:mt-4 shadow rounded-[20px]">
         <Button
-          onClick={() => todosState.toggleTodoCompletedById(todo.id)}
+          onClick={() => todosState.toggleTodoCompletedByNo(todo.no)}
           className="flex-shrink-0 items-start !rounded-l-[20px]"
           color="inherit"
         >
@@ -41,7 +41,7 @@ export default function TodoListItem({ todo, openDrawer }) {
           {todo.content}
         </div>
         <Button
-          onClick={() => openDrawer(todo.id)}
+          onClick={() => openDrawer(todo.no)}
           className="flex-shrink-0 !pt-2 !items-start !rounded-r-[20px]"
         >
           <span className="text-[#dcdcdc] text-2xl h-[80px]">

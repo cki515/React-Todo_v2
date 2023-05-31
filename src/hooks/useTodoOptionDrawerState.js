@@ -1,12 +1,12 @@
 import { useMemo, useState } from "react";
 
 export default function useTodoOptionDrawerState() {
-  const [todoId, setTodoId] = useState(null);
-  const open = useMemo(() => todoId !== null, [todoId]);
-  const close = () => setTodoId(null);
-  const openDrawer = (id) => setTodoId(id);
+  const [todoNo, setTodoNo] = useState(null);
+  const open = useMemo(() => todoNo !== null, [todoNo]);
+  const close = () => setTodoNo(null);
+  const openDrawer = (no) => setTodoNo(no);
   return {
-    todoId,
+    todoNo,
     open,
     close,
     openDrawer,

@@ -10,13 +10,13 @@ export default function WriteyPage() {
     const form = e.target;
     form.content.value = form.content.value.trim();
 
-    if (form.performDate.value.length == 0) {
-      alert("Plase Select Date");
+    if (form.performDate.value.length === 0) {
+      alert("Please Select Date");
       form.performDate.focus();
       return;
     }
-    if (form.content.value.length == 0) {
-      alert("Plase Enter Todo");
+    if (form.content.value.length === 0) {
+      alert("Please Enter Todo");
       form.content.focus();
       return;
     }

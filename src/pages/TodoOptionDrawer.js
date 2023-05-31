@@ -8,16 +8,16 @@ export default function TodoOptionDrawer({ state }) {
   const noticeSnackbarState = useNoticeSnackbarState();
 
   const removeTodo = () => {
-    if (window.confirm(`No : ${state.todoId} Delete it?`) == false) {
+    if (window.confirm(`No : ${state.todoNo} Delete it?`) === false) {
       state.close();
       return;
     }
-    todosState.removeTodoById(state.todoId);
+    todosState.removeTodoByNo(state.todoNo);
     state.close();
-    noticeSnackbarState.openBar(`Delete Todo No : ${state.todoId}`, "info");
+    noticeSnackbarState.openBar(`Delete Todo No : ${state.todoNo}`, "info");
   };
 
-  const todo = todosState.findTodoById(state.todoId);
+  const todo = todosState.findTodoByNo(state.todoNo);
 
   return (
     <>
@@ -29,14 +29,14 @@ export default function TodoOptionDrawer({ state }) {
       >
         <List className="!py-0">
           <ListItem className="!pt-6 !p-5">
-            No : {todo?.id} Option Drawer
+            No : {todo?.no} Option Drawer
           </ListItem>
           <Divider />
           <ListItem
             className="!pt-6 !p-5 !items-baseline"
             button
             component={NavLink}
-            to={`/edit/${todo?.id}`}
+            to={`/edit/${todo?.no}`}
           >
             <i className="fa-solid fa-pen-to-square"></i>&nbsp;Update
           </ListItem>

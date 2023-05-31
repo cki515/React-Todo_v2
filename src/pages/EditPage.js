@@ -1,37 +1,37 @@
 import { Button, TextField } from "@mui/material";
+import { useNavigate, useParams } from "react-router";
 import useNoticeSnackbarState from "../hooks/useNoticeSnackbarState";
 import useTodosState from "../hooks/useTodosState";
-import { useNavigate, useParams } from "react-router";
 
 export default function EditPage() {
-  const { id } = useParams();
+  const { no } = useParams();
   const navigate = useNavigate();
   const todosState = useTodosState();
   const noticeSnackbarState = useNoticeSnackbarState();
-  const todo = todosState.findTodoById(id);
+  const todo = todosState.findTodoByNo(no);
 
   const onSubmit = (e) => {
     e.preventDefault();
     const form = e.target;
     form.content.value = form.content.value.trim();
 
-    if (form.performDate.value.length == 0) {
-      alert("Plase Select Date");
+    if (form.performDate.value.length === 0) {
+      alert("Please Select Date");
       form.performDate.focus();
       return;
     }
-    if (form.content.value.length == 0) {
-      alert("Plase Enter Todo");
+    if (form.content.value.length === 0) {
+      alert("Please Enter Todo");
       form.content.focus();
       return;
     }
 
-    todosState.modifyTodoById(
-      todo.id,
+    todosState.modifyTodoByNo(
+      todo.no,
       form.performDate.value,
       form.content.value
     );
-    noticeSnackbarState.openBar(`Edit Todo List No : ${todo.id}`, "info");
+    noticeSnackbarState.openBar(`Edit Todo List No : ${todo.no}`, "info");
     navigate(-1);
   };
   return (
@@ -55,7 +55,7 @@ export default function EditPage() {
         <Button type="submit" variant="contained">
           <i className="fa-solid fa-marker"></i>
           <span>&nbsp;</span>
-          <span>No : {todo.id} Edit Todo</span>
+          <span>No : {todo.no} Edit Todo</span>
         </Button>
       </form>
     </>

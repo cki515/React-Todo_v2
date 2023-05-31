@@ -24,7 +24,7 @@ function App() {
           >
             TodoList
           </NavLink>
-          {location.pathname == "/main" && (
+          {location.pathname === "/main" && (
             <NavLink
               className="select-none self-stretch flex items-center text-xl"
               to="/write"
@@ -32,7 +32,7 @@ function App() {
               Write
             </NavLink>
           )}
-          {location.pathname != "/main" && (
+          {location.pathname !== "/main" && (
             <NavLink
               className="select-none self-stretch flex items-center text-xl"
               to="/main"
@@ -47,7 +47,7 @@ function App() {
       <Routes>
         <Route path="/main" element={<MainPage />} />
         <Route path="/write" element={<WritePage />} />
-        <Route path="/edit/:id" element={<EditPage />} />
+        <Route path="/edit/:no" element={<EditPage />} />
         <Route path="*" element={<Navigate to="/main" />} />
       </Routes>
     </>

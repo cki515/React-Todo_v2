@@ -17,12 +17,8 @@ export default function TodoList() {
       <SortedTabs />
       <div>
         <ul className="px-6 sm:px-8 pb-6 sm:pb-8">
-          {sortTodos.map((el, index) => (
-            <TodoListItem
-              key={el.no}
-              todo={el}
-              openDrawer={todoOptionDrawerState.openDrawer}
-            />
+          {sortTodos.map((todo) => (
+            <TodoListItem key={todo.no} todo={todo} openDrawer={todoOptionDrawerState.openDrawer} />
           ))}
         </ul>
       </div>

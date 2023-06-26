@@ -1,12 +1,6 @@
 import { atom } from "recoil";
 import { recoilPersist } from "recoil-persist";
 
-const { persistAtom: persistAtomTodos } = recoilPersist({
-  key: "persistAtomTodos",
-});
-const { persistAtom: persistAtomLastTodoId } = recoilPersist({
-  key: "persistAtomLastTodoId",
-});
 const { persistAtom: persistAtomCommon } = recoilPersist({
   key: "persistAtomCommon",
 });
@@ -14,13 +8,11 @@ const { persistAtom: persistAtomCommon } = recoilPersist({
 export const todosAtom = atom({
   key: "app/todosAtom",
   default: [],
-  effects_UNSTABLE: [persistAtomTodos],
 });
 
-export const lastTodoNoAtom = atom({
-  key: "app/lastTodoNoAtom",
-  default: 0,
-  effects_UNSTABLE: [persistAtomLastTodoId],
+export const todosIsLodingAtom = atom({
+  key: "app/todosIsLodingAtom",
+  default: true,
 });
 
 export const noticeSnackbarInfoAtom = atom({

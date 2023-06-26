@@ -2,10 +2,10 @@ import { Button, TextField } from "@mui/material";
 import useTodosState from "../hooks/useTodosState";
 import useNoticeSnackbarState from "../hooks/useNoticeSnackbarState";
 
-export default function WriteyPage() {
+export default function WritePage() {
   const todosState = useTodosState();
   const noticeSnackbarState = useNoticeSnackbarState();
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
     const form = e.target;
     form.content.value = form.content.value.trim();
@@ -20,28 +20,16 @@ export default function WriteyPage() {
       form.content.focus();
       return;
     }
-
-    const todoId = todosState.addTodo(
-      form.performDate.value,
-      form.content.value
-    );
-    noticeSnackbarState.openBar(`ADD Todo List No : ${todoId}`);
+    const todoNo = await todosState.addTodo(form.performDate.value, form.content.value);
+    noticeSnackbarState.openBar(`ADD Todo List No : ${todoNo}`);
     form.content.value = "";
     form.content.focus();
   };
 
   return (
     <>
-      <form
-        onSubmit={onSubmit}
-        className="flex-1 flex flex-col gap-5 p-6 sm:p-8"
-      >
-        <TextField
-          name="performDate"
-          label="When should I do it?"
-          focused
-          type="datetime-local"
-        />
+      <form onSubmit={onSubmit} className="flex-1 flex flex-col gap-5 p-6 sm:p-8">
+        <TextField name="performDate" label="When should I do it?" focused type="datetime-local" />
         <TextField
           name="content"
           className="flex-1"

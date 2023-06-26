@@ -1,62 +1,156 @@
-import { useRef } from "react";
-import { useRecoilState } from "recoil";
 import { produce } from "immer";
-import { lastTodoNoAtom, todosAtom } from "../state/todo";
+import { useRecoilState } from "recoil";
+import { todosAtom, todosIsLodingAtom } from "../state/todo";
 import { dateToStr } from "../state/util";
 
 export default function useTodosState() {
   const [todos, setTodos] = useRecoilState(todosAtom);
-  const [lastTodoNo, setLastTodoNo] = useRecoilState(lastTodoNoAtom);
-  const todoNoRef = useRef(lastTodoNo);
+  const [todosIsLoding, setTodosIsLoding] = useRecoilState(todosIsLodingAtom);
 
-  todoNoRef.current = lastTodoNo;
+  const userProtocol = window.location.protocol;
+  const userCode = window.location.hostname;
+  const API_TODOS_URL = `${userProtocol}//${userCode}:4000/${userCode}/todos`;
 
-  const addTodo = (performDate, newContent) => {
-    const no = ++todoNoRef.current;
-    setLastTodoNo(no);
+  const reloadTodos = async () => {
+    try {
+      const data = await fetch(`${API_TODOS_URL}`);
 
-    const newTodo = {
-      no: no,
-      regDate: dateToStr(new Date()),
-      performDate: dateToStr(new Date(performDate)),
-      content: newContent,
-      completed: false,
-    };
-
-    setTodos((todos) => [newTodo, ...todos]);
-    return no;
+      if (data.status >= 400 && data.status < 600) {
+        throw new Error(data.msg);
+      }
+      const dataJson = await data.json();
+      const newTodos = dataJson.data.map((todo) => ({
+        no: todo.no,
+        regDate: todo.reg_date,
+        updateDate: todo.update_date,
+        performDate: dateToStr(new Date(todo.perform_date)),
+        content: todo.content,
+        completed: todo.is_completed === 1,
+      }));
+      setTodos(newTodos);
+      setTodosIsLoding(false);
+    } catch (err) {
+      alert(err.message);
+      window.location.reload();
+    }
   };
 
-  const removeTodo = (index) => {
-    const newTodos = todos.filter((_, _index) => _index !== index);
-    setTodos(newTodos);
+  const addTodo = async (performDate, newContent) => {
+    try {
+      const inserRs = await fetch(`${API_TODOS_URL}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          perform_date: dateToStr(new Date(performDate)),
+          content: newContent,
+          is_completed: 0,
+        }),
+      });
+
+      const inserRsJson = await inserRs.json();
+      const no = inserRsJson.data.no;
+
+      const newTodo = {
+        no: no,
+        regDate: inserRsJson.data.reg_date,
+        performDate: dateToStr(new Date(inserRsJson.data_perform_date)),
+        content: inserRsJson.data.content,
+        completed: inserRsJson.data.is_completed === 1,
+      };
+
+      setTodos((todos) => [newTodo, ...todos]);
+      return no;
+    } catch (err) {
+      alert(err.message);
+      window.location.reload();
+    }
+  };
+
+  const removeTodo = async (index, no) => {
+    try {
+      const removeRs = await fetch(`${API_TODOS_URL}/${no}`, {
+        method: "DELETE",
+      });
+
+      if (removeRs.status >= 400 && removeRs.status < 600) {
+        throw new Error(removeRs.msg);
+      }
+
+      const newTodos = todos.filter((_, _index) => _index !== index);
+      setTodos(newTodos);
+    } catch (err) {
+      alert(err.message);
+      window.location.reload();
+    }
   };
 
   const removeTodoByNo = (no) => {
     const index = findTodoIndexByNo(no);
-    removeTodo(index);
+    removeTodo(index, no);
   };
 
-  const modifyTodo = (index, performDate, content) => {
-    const newTodos = produce(todos, (draft) => {
-      draft[index].performDate = dateToStr(new Date(performDate));
-      draft[index].content = content;
-    });
-    setTodos(newTodos);
+  const modifyTodo = async (index, no, performDate, newContent) => {
+    try {
+      const modifyRs = await fetch(`${API_TODOS_URL}/${no}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          perform_date: performDate,
+          content: newContent,
+        }),
+      });
+
+      if (modifyRs.status >= 400 && modifyRs.status < 600) {
+        throw new Error(modifyRs.msg);
+      }
+
+      const newTodos = produce(todos, (draft) => {
+        draft[index].performDate = dateToStr(new Date(performDate));
+        draft[index].content = newContent;
+      });
+      setTodos(newTodos);
+    } catch (err) {
+      alert(err.message);
+      window.location.reload();
+    }
   };
 
   const modifyTodoByNo = (no, performDate, newContent) => {
     const index = findTodoIndexByNo(no);
-    modifyTodo(index, performDate, newContent);
+    modifyTodo(index, no, performDate, newContent);
   };
 
-  const toggleTodoCompletedByNo = (no) => {
+  const toggleTodoCompletedByNo = async (no) => {
     const index = findTodoIndexByNo(no);
-    setTodos(
-      produce(todos, (draft) => {
-        draft[index].completed = !draft[index].completed;
-      })
-    );
+
+    try {
+      const modifyRs = await fetch(`${API_TODOS_URL}/${no}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          is_completed: todos[index].completed ? 0 : 1,
+        }),
+      });
+
+      if (modifyRs.status >= 400 && modifyRs.status < 600) {
+        throw new Error(modifyRs.msg);
+      }
+
+      setTodos(
+        produce(todos, (draft) => {
+          draft[index].completed = !draft[index].completed;
+        })
+      );
+    } catch (err) {
+      alert(err.message);
+      window.location.reload();
+    }
   };
 
   const findTodoIndexByNo = (no) => {
@@ -77,5 +171,7 @@ export default function useTodosState() {
     findTodoByNo,
     modifyTodoByNo,
     toggleTodoCompletedByNo,
+    todosIsLoding,
+    reloadTodos,
   };
 }

@@ -10,7 +10,7 @@ export default function EditPage() {
   const noticeSnackbarState = useNoticeSnackbarState();
   const todo = todosState.findTodoByNo(no);
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
     const form = e.target;
     form.content.value = form.content.value.trim();
@@ -26,14 +26,11 @@ export default function EditPage() {
       return;
     }
 
-    todosState.modifyTodoByNo(
-      todo.no,
-      form.performDate.value,
-      form.content.value
-    );
+    await todosState.modifyTodoByNo(todo.no, form.performDate.value, form.content.value);
     noticeSnackbarState.openBar(`Edit Todo List No : ${todo.no}`, "info");
     navigate(-1);
   };
+
   return (
     <>
       <form onSubmit={onSubmit} className="flex-1 flex flex-col gap-5 p-10">

@@ -3,9 +3,7 @@ import { todoList_filterCompletedIndexAtom } from "../state/todo";
 import { useRecoilState } from "recoil";
 
 export default function CompletedTabs() {
-  const [filterCompletedIndex, setFilterCompletedIndex] = useRecoilState(
-    todoList_filterCompletedIndexAtom
-  );
+  const [filterCompletedIndex, setFilterCompletedIndex] = useRecoilState(todoList_filterCompletedIndexAtom);
 
   return (
     <>

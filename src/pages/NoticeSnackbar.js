@@ -11,11 +11,7 @@ export default function NoticeSnackbar() {
 
   return (
     <>
-      <Snackbar
-        open={state.open}
-        autoHideDuration={state.autoHideDuration}
-        onClose={state.closeBar}
-      >
+      <Snackbar open={state.open} autoHideDuration={state.autoHideDuration} onClose={state.closeBar}>
         <Alert severity={state.severity}>{state.msg}</Alert>
       </Snackbar>
     </>

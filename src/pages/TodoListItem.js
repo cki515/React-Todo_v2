@@ -7,18 +7,8 @@ export default function TodoListItem({ todo, openDrawer }) {
   return (
     <li key={todo.no} className="mt-6 sm:mt-8">
       <div className="flex gap-2">
-        <Chip
-          label={`No : ${todo.no}`}
-          size="medium"
-          color="secondary"
-          variant="outlined"
-        />
-        <Chip
-          label={`Time: ${todo.performDate.substr(2, 14)}`}
-          size="medium"
-          color="info"
-          variant="outlined"
-        />
+        <Chip label={`No : ${todo.no}`} size="medium" color="secondary" variant="outlined" />
+        <Chip label={`Time: ${todo.performDate.substr(2, 14)}`} size="medium" color="info" variant="outlined" />
       </div>
       <div className="flex mt-2 sm:mt-4 shadow rounded-[20px]">
         <Button
@@ -27,11 +17,7 @@ export default function TodoListItem({ todo, openDrawer }) {
           color="inherit"
         >
           <span
-            className={
-              (todo.completed
-                ? "text-[color:var(--mui-color-primary-main)]"
-                : "text-[#dcdcdc]") + " text-4xl"
-            }
+            className={(todo.completed ? "text-[color:var(--mui-color-primary-main)]" : "text-[#dcdcdc]") + " text-4xl"}
           >
             <i className="fa-solid fa-check"></i>
           </span>
@@ -40,10 +26,7 @@ export default function TodoListItem({ todo, openDrawer }) {
         <div className="flex-grow flex my-3 items-center whitespace-pre-wrap leading-relaxed hover:text-[color:var(--mui-color-primary-main)]">
           {todo.content}
         </div>
-        <Button
-          onClick={() => openDrawer(todo.no)}
-          className="flex-shrink-0 !pt-2 !items-start !rounded-r-[20px]"
-        >
+        <Button onClick={() => openDrawer(todo.no)} className="flex-shrink-0 !pt-2 !items-start !rounded-r-[20px]">
           <span className="text-[#dcdcdc] text-2xl h-[80px]">
             <i className="fa-solid fa-ellipsis-vertical"></i>
           </span>

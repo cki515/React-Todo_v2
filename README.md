@@ -2,10 +2,10 @@
 
 ## Introduction
 
-- This project is to practice React, Recoil, express and DB.
-- A React Todo application has been completed with functions to write, update, and delete Todos, as well as a sort function.
-  The project can be found on Github and utilized MARIA_DB, React, TailwindCSS, mui/material, and recoil.
-
+- This project is to practice React, Recoil.
+- A React Todo app with functions for writing, updating, deleting, and sorting tasks. Built with React, TailwindCSS, mui/material, and recoil.
+  Code available on Github.
+  
 ## Technologies
 
 Project is created with:
